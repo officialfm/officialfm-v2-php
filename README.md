@@ -47,66 +47,66 @@ $officialfm = new OfficialFM('your_api_key');
 Search for a track:
 
 ```php 
-$officialfm->tracks('Nightcall')
+$officialfm->tracks('Nightcall');
 ```
 
 Get info about a specific track:
 
 ```php
-$officialfm->track('1nnQ')
+$officialfm->track('1nnQ');
 ```
 
 Search for a playlist:
 
 ```php
-$officialfm->playlists('AWOLNATION')
+$officialfm->playlists('AWOLNATION');
 ```
 
 Get info about a specific playlist:
 
 ```php
-$officialfm->playlist('CbqY')
+$officialfm->playlist('CbqY');
 ```
 
 This only returns general information about the playlist and the following returns only the tracks in the playlist.
 
 ```php
-$officialfm->playlist_tracks('CbqY')
+$officialfm->playlist_tracks('CbqY');
 ```
 
 To combine the two, use:
 
 ```php
-$officialfm->playlist('CbqY', array('fields' => 'tracks'))
+$officialfm->playlist('CbqY', array('fields' => 'tracks'));
 ```
 
 Search for a project (a project can be an artist or a collaboration between several artists)
 
 ```php
-$officialfm->projects('Mac Miller x Pharrell')
+$officialfm->projects('Mac Miller x Pharrell');
 ```
 
 Similarly to playlists, you can get general information on the project with
 
 ```php
-$officialfm->project('edB6')
+$officialfm->project('edB6');
 ```
 
 You can retrieve only the tracks and only playlists in that project with
 
 ```php
-$officialfm->project_tracks('edB6')
-$officialfm->project_playlists('edB6')
+$officialfm->project_tracks('edB6');
+$officialfm->project_playlists('edB6');
 ```
 
 and you can mix and match:
 
 ```php
 // Artist information including tracks
-$officialfm->project('edB6', array('fields' => 'tracks'))
+$officialfm->project('edB6', array('fields' => 'tracks'));
 
 // Artist information and their tracks and playlists
-$officialfm->project('edB6', array('fields' => array('tracks', 'playlists')))
+$officialfm->project('edB6', array('fields' => array('tracks', 'playlists')));
 ```
 
 ### Fine-grained calls
@@ -116,7 +116,7 @@ As suggested above, all methods take a second, optional, parameter: an array of 
 For example, to search for two Tamara Sky playlists and include their track listings in the results, you could call
 
 ```php
-$officialfm->playlists('Tamara Sky', array('limit' => 2, 'fields' => 'tracks'))
+$officialfm->playlists('Tamara Sky', array('limit' => 2, 'fields' => 'tracks'));
 ```
 
 Consult the [API docs](http://dev.official.fm) for a description of valid optional parameters.
