@@ -50,6 +50,13 @@ Search for a track:
 $officialfm->tracks('Nightcall');
 ```
 
+Searches are paged. Pass the 'page' parameter to access a specific page (page 1
+is returned by default):
+
+```php
+$officialfm->tracks('Mac Miller', array('page => 2'));
+```
+
 Get info about a specific track:
 
 ```php
@@ -93,7 +100,56 @@ $officialfm->project_tracks('edB6');
 $officialfm->project_playlists('edB6');
 ```
 
-Consult the [API docs](http://dev.official.fm) for a description of valid optional parameters.
+## API response enhancements
+
+The API wraps responses in a root element, e.g.:
+
+```json
+{
+  "track": {
+    "title": "Some track"
+    ...
+  }
+}
+```
+
+The responses given by methods in this library don't have a root and expose the
+resource's properites directly instead (e.g. `$officialfm->track('xxxx')->title`).
+
+Search results are also unwrapped. For example, the raw response of a track
+search looks like:
+
+```json
+{
+  "page": 1,
+  "total_entries": 2,
+  "total_pages": 1,
+  "tracks" : [
+    {
+      "track": {
+         // track properties
+      }
+    },
+    {
+      "track": {
+         // track properites
+      }
+    }
+  ]
+}
+```
+
+The library removes the roots of the search result items, so you can access an item
+directly through array access.
+
+```php
+$track = $officialfm->tracks('foo')->tracks[0];
+puts $track->duration;
+```
+
+This kind of modification is made wherever it makes sense: track list in a
+playlist, tracks list of project, playlists list of project,...
+
 
 ## Copyright
 

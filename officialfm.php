@@ -18,7 +18,7 @@ require_once dirname(__FILE__) . '/curl.php';
 
 class OfficialFM {
 	
-    const VERSION = "0.0.1";
+    const VERSION = "0.2.0";
     const API_BASE_URL = "http://api.official.fm/";
     
     /**
@@ -45,7 +45,10 @@ class OfficialFM {
       $this->curl->headers['Content-Type'] = 'application/json';
       $this->curl->headers['Accept']       = 'application/json';
       $this->curl->headers['X-API-Version']= '2.0';
-      $this->curl->headers['X-API-Key']= $api_key;
+
+      if ($this->api_key) {
+          $this->curl->headers['X-API-Key']= $this->api_key;
+      }
     }
     
     
@@ -62,7 +65,9 @@ class OfficialFM {
 
       $results = $this->api_get('tracks/search', $params);
 
-      return $results->tracks;
+      $this->strip_object_array_roots($results->tracks, 'track');
+
+      return $results;
     }
     
     /**
@@ -90,7 +95,9 @@ class OfficialFM {
 
          $results = $this->api_get('playlists/search', $params);
 
-         return $results->playlists;
+         $this->strip_object_array_roots($results->playlists, 'playlist');
+
+         return $results;
      }
      
     /**
@@ -114,6 +121,8 @@ class OfficialFM {
      public function playlist_tracks($playlist_id, $options = array()) {
         $result = $this->api_get('playlists/'.$playlist_id.'/tracks', $options);
 
+        $this->strip_object_array_roots($result->tracks, 'track');
+
         return $result->tracks;
      }
      
@@ -130,7 +139,9 @@ class OfficialFM {
 
          $results = $this->api_get('projects/search', $params);
 
-         return $results->projects;
+         $this->strip_object_array_roots($results->projects, 'project');
+
+         return $results;
      }
     
     /**
@@ -154,6 +165,8 @@ class OfficialFM {
      public function project_tracks($project_id, $options = array()) {
         $result = $this->api_get('projects/'.$project_id.'/tracks', $options);
 
+        $this->strip_object_array_roots($result->tracks, 'track');
+
         return $result->tracks;
      }
 
@@ -165,6 +178,8 @@ class OfficialFM {
      */
      public function project_playlists($project_id, $options = array()) {
         $result = $this->api_get('projects/'.$project_id.'/playlists', $options);
+
+        $this->strip_object_array_roots($result->playlists, 'playlist');
 
         return $result->playlists;
      }
@@ -200,6 +215,32 @@ class OfficialFM {
       }
     
       return $result;
+    }
+
+
+    /* Removes the root element for each object in an array:
+     *
+     * $tracks = array(
+     *   'track' => properties1,
+     *   'track' => properties2,
+     *   'track' => properties3,
+     * )
+     *
+     * strip_object_array_roots($tracks, 'track')
+     *
+     * $tracks becomes:
+     * array(
+     *   [0] => properties1,
+     *   [1] => properties2,
+     *   [2] => properties3,
+     * )
+     */
+    private static function strip_object_array_roots(&$array, $property) {
+        $remove_object_root = function ($obj) use ($property) {
+            return $obj->{$property};
+        };
+
+        $array = array_map($remove_object_root, $array);
     }
 
 }
