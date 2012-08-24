@@ -144,7 +144,7 @@ directly through array access.
 
 ```php
 $track = $officialfm->tracks('foo')->tracks[0];
-puts $track->duration;
+echo $track->duration;
 ```
 
 This kind of modification is made wherever it makes sense: track list in a
