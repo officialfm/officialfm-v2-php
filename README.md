@@ -57,10 +57,22 @@ is returned by default):
 $officialfm->tracks('Mac Miller', array('page => 2'));
 ```
 
+Filter results by track type (original, remix, cover, mashup, mixtape):
+
+```php
+$officialfm->tracks('Mac Miller', array('types' => array('original', 'remix')));
+```
+
 Get info about a specific track:
 
 ```php
 $officialfm->track('1nnQ');
+```
+
+Get the artwork and streaming urls
+
+```php
+$officialfm->track('1nnQ', array('fields' => array('cover', 'streaming')));
 ```
 
 Search for a playlist:

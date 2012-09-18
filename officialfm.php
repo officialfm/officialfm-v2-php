@@ -188,6 +188,16 @@ class OfficialFM {
 
     // helper to use CURL and decode from json
     private function api_get($sub_url, $params) {
+      $implode_arrays = function ($param) {
+          if(is_array($param)) {
+              return implode(",", $param);
+          } else {
+              return $param;
+          }
+      };
+
+      $params = array_map($implode_arrays, $params);
+
       $url = self::API_BASE_URL.$sub_url;
       $json = $this->curl->get($url, $params);
       return $this->decode_json($json);
